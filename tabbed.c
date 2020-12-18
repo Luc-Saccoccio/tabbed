@@ -18,7 +18,6 @@
 #include <X11/Xft/Xft.h>
 
 #include "arg.h"
-#include "icon.h"
 
 /* XEMBED messages */
 #define XEMBED_EMBEDDED_NOTIFY          0
@@ -50,7 +49,7 @@
 
 enum { ColFG, ColBG, ColLast };                         /* color */
 enum { WMProtocols, WMDelete, WMName, WMState, WMFullscreen,
-	XEmbed, WMSelectTab, WMLast };                      /* default atoms */
+	XEmbed, WMSelectTab, WMIcon, WMLast };                      /* default atoms */
 
 typedef union {
 	int i;
@@ -1007,6 +1006,7 @@ setup(void) {
 	snprintf(winid, sizeof(winid), "%lu", win);
 	setenv("XEMBED", winid, 1);
 
+
 	nextfocus = foreground;
 	focus(-1);
 }
@@ -1195,6 +1195,7 @@ xsettitle(Window w, const char *str) {
 		XFree(xtp.value);
 	}
 }
+
 
 char *argv0;
 
