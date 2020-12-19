@@ -49,7 +49,7 @@
 
 enum { ColFG, ColBG, ColLast };                         /* color */
 enum { WMProtocols, WMDelete, WMName, WMState, WMFullscreen,
-	XEmbed, WMSelectTab, WMIcon, WMLast };                      /* default atoms */
+	XEmbed, WMSelectTab, WMLast };                      /* default atoms */
 
 typedef union {
 	int i;
