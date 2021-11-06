@@ -125,7 +125,6 @@ static void sendxembed(int c, long msg, long detail, long d1, long d2);
 static void setup(void);
 static void setcmd(int argc, char *argv[], int);
 static void sigchld(int unused);
-static void showbar(const Arg *arg);
 static void spawn(const Arg *arg);
 static int textnw(const char *text, unsigned int len);
 static void unmanage(int c);
@@ -150,7 +149,7 @@ static void (*handler[LASTEvent]) (const XEvent *) = {
 	[MapRequest] = maprequest,
 	[PropertyNotify] = propertynotify,
 };
-static int bh, wx, wy, ww, wh, vbh;
+static int bh, wx, wy, ww, wh;
 static unsigned int numlockmask = 0;
 static Bool running = True, nextfocus, doinitspawn = True,
 	    fillagain = False, closelastclient = False;
@@ -166,7 +165,6 @@ static char winid[64];
 static char **cmd = NULL;
 static char *wmname = "tabbed";
 static const char *geometry = NULL;
-static Bool barvisibility = False;
 
 char *argv0;
 
@@ -304,18 +302,8 @@ die(const char *errstr, ...) {
 void
 drawbar(void) {
 	XftColor *col;
-	int c, fc, width, n = 0, nbh;
+	int c, fc, width, n = 0;
 	char *name = NULL;
-
-	nbh = barvisibility ? vbh : 0;
-	if (nbh != bh) {
-		bh = nbh;
-		for (c = 0; c < nclients; c++)
-			XMoveResizeWindow(dpy, clients[c]->win, 0, bh, ww, wh-bh);
-	}
-
-	if (bh == 0) return;
-
 
 	if(nclients == 0) {
 		dc.x = 0;
@@ -923,7 +911,7 @@ setup(void) {
 	screen = DefaultScreen(dpy);
 	root = RootWindow(dpy, screen);
 	initfont(font);
-	vbh = dc.h = dc.font.height + 2;
+	bh = dc.h = dc.font.height + 2;
 
 	/* init atoms */
 	wmatom[WMProtocols] = XInternAtom(dpy, "WM_PROTOCOLS", False);
@@ -1009,12 +997,6 @@ setup(void) {
 
 	nextfocus = foreground;
 	focus(-1);
-}
-
-void showbar(const Arg *arg)
-{
-	barvisibility = arg->i;
-	drawbar();
 }
 
 void
